@@ -59,7 +59,7 @@ export default function Example() {
     }];
   
     return (
-      <>
+      <div>
         {users.map(user => (
           <Profile key={user.name} user={user}/>
         ))}
@@ -70,6 +70,6 @@ export default function Example() {
         <button onClick={() => setCount(count+1)}>Sumar</button>
         <button onClick={() => setCount(count-1)}>Restar</button>
         <p> El contador va en: {count}</p>
-      </>
+      </div>
     )
   }
