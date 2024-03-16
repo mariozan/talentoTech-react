@@ -1,5 +1,10 @@
+import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 export default function UserList(){
+    /** Obtiene el estado de una variable */
+    const users = useSelector(state => state.users)
+    console.log(users)
 
     return (
         <div className="flex justify-center py-8 px-10">
@@ -11,27 +16,33 @@ export default function UserList(){
                     <th className="px-4 py-2 text-white">Email</th>
                     <th className="px-4 py-2 text-white">Idetification</th>
                     <th className="px-4 py-2 text-white">Avatar</th>
+                    <th className="px-4 py-2 text-white">Actions</th>
                 </tr>
             </thead>
             <tbody className="bg-gray-200 ">
-                <tr>
-                    <td className="border-y-2 px-4 py-2 border-indigo-600">Juan</td>
-                    <td className="border-y-2 px-4 py-2 border-indigo-600">Perez</td>
-                    <td className="border-y-2 px-4 py-2 border-indigo-600">juan@correo.com</td>
-                    <td className="border-y-2 px-4 py-2 border-indigo-600">124545</td>
+                {users.map(user => (
+                <tr key={user._id}>
+                    <td className="border-y-2 px-4 py-2 border-indigo-600">{user.name}</td>
+                    <td className="border-y-2 px-4 py-2 border-indigo-600">{user.lastname}</td>
+                    <td className="border-y-2 px-4 py-2 border-indigo-600">{user.email}</td>
+                    <td className="border-y-2 px-4 py-2 border-indigo-600">{user.id}</td>
                     <td className="border-y-2 px-4 py-2 border-indigo-600">
                         <img className="size-40 transition-transform duration-1000 transform hover:scale-110 max-w-none"
-                            src="https://img.olympics.com/images/image/private/t_s_w960/t_s_16_9_g_auto/f_auto/primary/jxn3zttbkrvxudzifk6b"/></td>
+                            src={user.avatar}/></td>
+                    <td className="border-y-2 px-4 py-2 border-indigo-600">
+                    <div className="inline-flex rounded-md shadow-sm" role="group">
+                        <Link to={`/user/${user._id}`} 
+                                className="px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border
+                                             border-gray-900 rounded-s-lg hover:bg-gray-900 hover:text-white 
+                                             focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white
+                                             dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">Edit</Link>
+                        <button type="button" className="px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">
+                            Delete
+                        </button>
+                    </div>
+                    </td>
                 </tr>
-                <tr>
-                    <td className="border px-4 py-2">Angela</td>
-                    <td className="border px-4 py-2">Cardona</td>
-                    <td className="border px-4 py-2">angela@correo.com</td>
-                    <td className="border px-4 py-2">454545455</td>
-                    <td className="border px-4 py-2">
-                        <img className="size-40 transition-transform duration-300 transform hover:scale-110 max-w-none" 
-                    src="https://upload.wikimedia.org/wikipedia/commons/5/53/Amparo_Grisales_2023_01.jpg"/></td>
-                </tr>
+                ))}
             </tbody>
         </table>
         </div>
