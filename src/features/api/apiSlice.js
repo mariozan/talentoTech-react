@@ -7,9 +7,7 @@ export const apiSlice = createApi({
     }), // Hace las veces de Axios
     endpoints: (builder) => ({
         getUsers: builder.query({
-            query: () => '/user',
-            providesTags: ["Users"], // Funcion que se ejecuta al hacer un llamado en conjutno con el invalidate
-            transformResponse: response => response.sort((a, b) => b._id - a._id) // Transforma y reordena
+            query: () => '/user'
         }),
         createUser: builder.mutation({
             query: (newUser) => ({
