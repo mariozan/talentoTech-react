@@ -1,9 +1,11 @@
-import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useGetUsersQuery } from '../../features/api/apiSlice';
 
 export default function UserList(){
-    /** Obtiene el estado de una variable */
-    const users = useSelector(state => state.users)
+
+    /** Obtiene el estado de una variable con Redux */
+    // const users = useSelector(state => state.users)
+    const {data: users, isError, isLoading, error } = useGetUsersQuery()
     console.log(users)
 
     return (
