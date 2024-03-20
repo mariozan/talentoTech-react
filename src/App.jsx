@@ -4,8 +4,9 @@ import Example from "./components/example";
 import Footer from "./components/footer";
 import Header from "./components/header";
 import UserList from "./components/user/UserList";
-import UserForm from "./components/user/UserForm";
 import Login from "./components/auth/Login";
+import UserFormCreate from "./components/user/UserFormCreate";
+import UserFormEdit from "./components/user/UserFormEdit";
 
 function App() {
   return (
@@ -15,8 +16,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Example />} />
           <Route path="/user" element={<UserList />} />
-          <Route path="/create-user" element={<UserForm />} />
-          <Route path="/user/:id" element={<UserForm />} />
+          <Route path="/create-user" element={<UserFormCreate />} />
+          <Route path="/user/:id" element={<UserFormEdit />} />
           <Route path="/login" element={<Login />} />
         </Routes>
         <Footer />
