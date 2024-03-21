@@ -1,11 +1,27 @@
 import { Link } from 'react-router-dom';
-import { useGetUsersQuery } from '../../features/api/apiSlice';
+import { useDeleteUserMutation, useGetUsersQuery } from '../../features/api/apiSlice';
+import Swal from 'sweetalert2'
 
 export default function UserList(){
 
     /** Obtiene el estado de una variable con Redux */
     // const users = useSelector(state => state.users)
     const { data: users, isLoading, isError, error } = useGetUsersQuery();
+    const [deleteUser] = useDeleteUserMutation();
+    const handleDelete = (user) => {
+        Swal.fire({
+            title: `¿Estas seguro que deseas eliminar el Usuario ${user.name} ${user.lastname}?`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Confirmar"
+          }).then((result) => {
+            if (result.isConfirmed) {
+                deleteUser(user._id)              
+            }
+          });
+    }
     
     if (isLoading) return <div role="status" className='flex justify-center'>
         <svg aria-hidden="true" className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -46,7 +62,11 @@ export default function UserList(){
                                              border-gray-900 rounded-s-lg hover:bg-gray-900 hover:text-white 
                                              focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white
                                              dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">Edit</Link>
-                        <button type="button" className="px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">
+                        <button type="button" 
+                                onClick={() => {
+                                    handleDelete(user)
+                                }}
+                                className="px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">
                             Delete
                         </button>
                     </div>

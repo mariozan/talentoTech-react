@@ -4,6 +4,13 @@ export const apiSlice = createApi({
     reducerPath: "api",
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:3000',
+        prepareHeaders: (headers, {}) => {
+            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWY0YmJhNzU1ZjczZDBiNWI2ZDY4MWIiLCJlbWFpbCI6Im1hcmlvQGNvcnJlbzEnLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcxMDk4MDgyMiwiZXhwIjoxNzEwOTg0NDIyfQ.X4mbLgLMP1gzfBncC3ctwVU4lhdFeCVidYaI71ydwes"
+            if(token){
+                headers.set('Authorization', `Bearer ${token}`);
+            }
+            return headers;
+        }
     }), // Hace las veces de Axios
     endpoints: (builder) => ({
         getUsers: builder.query({
@@ -24,10 +31,29 @@ export const apiSlice = createApi({
                 body: newUser
             }),
             invalidatesTags: ["Users"] // Se ejecuta cuando hay un cambio en la BD
+        }),
+        updateUser: builder.mutation({
+            query: (user) => ({
+                url: `/user/${user._id}`,
+                method: 'PATCH',
+                body: user
+            }),
+            invalidatesTags: ["Users", "User"]
+        }),
+        deleteUser: builder.mutation({
+            query: (_id) => ({
+                url: `/user/${_id}`,
+                method: "DELETE",
+            }),
+            invalidatesTags: ["Users"]
         })
     })    
 })
 
 /** Segun la nomenclatura de la libreria se usa use al principio 
  * y Query o Mutation al final segun corresponda */
-export const { useGetUsersQuery, useGetUserByIdQuery, useCreateUserMutation } = apiSlice
+export const { useGetUsersQuery, 
+                useGetUserByIdQuery, 
+                useCreateUserMutation, 
+                useUpdateUserMutation,
+                useDeleteUserMutation } = apiSlice
