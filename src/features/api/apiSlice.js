@@ -54,6 +54,13 @@ export const apiSlice = createApi({
                 body: body.file
             }),
             invalidatesTags: ["Users"]
+        }),
+        login: builder.mutation({
+            query: (body) => ({
+                url: 'login',
+                method: 'POST',
+                body: body
+            })
         })        
     })    
 })
@@ -65,5 +72,6 @@ export const { useGetUsersQuery,
                 useCreateUserMutation, 
                 useUpdateUserMutation,
                 useDeleteUserMutation,
-                useUploadAvatarMutation
+                useUploadAvatarMutation,
+                useLoginMutation
         } = apiSlice
