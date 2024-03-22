@@ -5,7 +5,7 @@ export const apiSlice = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:3000',
         prepareHeaders: (headers, {}) => {
-            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWY0YmJhNzU1ZjczZDBiNWI2ZDY4MWIiLCJlbWFpbCI6Im1hcmlvQGNvcnJlbzEnLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcxMDk4MDgyMiwiZXhwIjoxNzEwOTg0NDIyfQ.X4mbLgLMP1gzfBncC3ctwVU4lhdFeCVidYaI71ydwes"
+            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWY0YmJhNzU1ZjczZDBiNWI2ZDY4MWIiLCJlbWFpbCI6Im1hcmlvQGNvcnJlbzEnLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcxMTA2ODAyMywiZXhwIjoxNzExMDcxNjIzfQ.QwXbfRDXd1CBGTeqXhYjtCBWwlFZBYQru0sMIhOvGQs"
             if(token){
                 headers.set('Authorization', `Bearer ${token}`);
             }
@@ -46,7 +46,15 @@ export const apiSlice = createApi({
                 method: "DELETE",
             }),
             invalidatesTags: ["Users"]
-        })
+        }),
+        uploadAvatar: builder.mutation({
+            query: (body) => ({
+                url: `/upload/${body._id}/user`,
+                method: "POST",
+                body: body.file
+            }),
+            invalidatesTags: ["Users"]
+        })        
     })    
 })
 
@@ -56,4 +64,6 @@ export const { useGetUsersQuery,
                 useGetUserByIdQuery, 
                 useCreateUserMutation, 
                 useUpdateUserMutation,
-                useDeleteUserMutation } = apiSlice
+                useDeleteUserMutation,
+                useUploadAvatarMutation
+        } = apiSlice

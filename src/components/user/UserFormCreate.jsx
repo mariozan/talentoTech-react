@@ -1,19 +1,23 @@
 import { useNavigate } from 'react-router-dom'
-import { useCreateUserMutation } from '../../features/api/apiSlice';
+import { useCreateUserMutation, useUploadAvatarMutation } from '../../features/api/apiSlice';
 import Swal from 'sweetalert2'
 import UserForm from './UserForm';
+import { useState } from 'react';
 
 export default function UserFormCreate(){
 
     const navigate = useNavigate(); // Instanciamos la vaiable de useNavigate
     const [createUser] = useCreateUserMutation()
+    
+    const [file, setFile] = useState(null);
+    const [uploadAvatar] = useUploadAvatarMutation();
 
-    const onFileChange = (e) => {
-        console.log(e.target.files)
+    const handleChangeAvatar = (e) => {
+        setFile(e.target.files)
     }
-
+  
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault();        
         const newUser = {
             name: e.target.name.value,
             lastname: e.target.lastname.value,
@@ -22,7 +26,7 @@ export default function UserFormCreate(){
             password: e.target.password.value,
         }
         try {
-            const response = await createUser(newUser)
+            const response = await createUser(newUser)          
             if(response.data.status == "error"){
                 Swal.fire({
                     position: "top-end",
@@ -31,7 +35,12 @@ export default function UserFormCreate(){
                     showConfirmButton: false,
                     timer: 1500
                   })
-            }else{            
+            }else{
+                if(file){
+                    const formData = new FormData();
+                    formData.append("file", file[0])
+                    uploadAvatar({_id: response.data._id, file: formData})
+                }
                 Swal.fire({
                     position: "top-end",
                     icon: "success",
@@ -49,6 +58,8 @@ export default function UserFormCreate(){
     }
 
     return (
-        <UserForm props={{handleSubmit: handleSubmit, onFileChange: onFileChange, user:null}} />
+        <UserForm props={{handleSubmit: handleSubmit, 
+                        handleChangeAvatar: handleChangeAvatar, 
+                        user:null}} />
     );
 }

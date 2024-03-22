@@ -1,13 +1,21 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import { useGetUserByIdQuery, useUpdateUserMutation } from '../../features/api/apiSlice';
+import { useGetUserByIdQuery, useUpdateUserMutation, useUploadAvatarMutation } from '../../features/api/apiSlice';
 import Swal from 'sweetalert2'
 import UserForm from './UserForm';
+import { useState } from 'react';
 
 export default function UserFormEdit(){
 
     const navigate = useNavigate(); // Instanciamos la vaiable de useNavigate
     const params = useParams(); // Instanciamos la variable para obtener los parametros por URL
     const [updateUser] = useUpdateUserMutation()
+
+    const [file, setFile] = useState(null);
+    const [uploadAvatar] = useUploadAvatarMutation();
+
+    const handleChangeAvatar = (e) => {
+        setFile(e.target.files)
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();        
@@ -20,6 +28,11 @@ export default function UserFormEdit(){
         }
         try {
             const response = await updateUser(user)
+            if(file){
+                const formData = new FormData();
+                formData.append("file", file[0])
+                uploadAvatar({_id: params.id, file: formData})
+            }
             if(response.data.status == "error"){
                 Swal.fire({
                     position: "top-end",
@@ -28,7 +41,7 @@ export default function UserFormEdit(){
                     showConfirmButton: false,
                     timer: 1500
                   })
-            }else{            
+            }else{                     
                 Swal.fire({
                     position: "top-end",
                     icon: "success",
@@ -62,6 +75,6 @@ export default function UserFormEdit(){
     else if(isError) return (<div>Error: {error.message} </div>)        
         
     return (
-        <UserForm props={{handleSubmit:handleSubmit, onFileChange: null, user:user}} />
+        <UserForm props={{handleSubmit:handleSubmit, handleChangeAvatar:handleChangeAvatar, onFileChange: null, user:user}} />
     );
 }

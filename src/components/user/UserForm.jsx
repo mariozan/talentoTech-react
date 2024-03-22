@@ -1,6 +1,6 @@
 /** Componente reutilizable para Crear y Actualizar un Usuario */
 export default function UserForm({props}){
-    const { handleSubmit, onFileChange, user } = props
+    const { handleSubmit, handleChangeAvatar, user } = props
 
     return (
         <div className="max-w-md w-full mx-auto px-5 py-5">
@@ -40,7 +40,7 @@ export default function UserForm({props}){
                             <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
                             <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
                         </div>
-                        <input id="avatar" name="avatar" accept="image/png, image/jpeg" type="file" className="hidden" onChange={onFileChange} />
+                        <input onChange={handleChangeAvatar} id="avatar" name="avatar" accept="image/png, image/jpeg" type="file" className="hidden"/>
                     </label>
                 </div> 
                 <div className="flex justify-center">
