@@ -2,12 +2,15 @@ import { useState } from "react";
 import { useLoginMutation } from "../../features/api/apiSlice";
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { loginSuccess } from "../../features/authSlice";
 
 export default function Login(){
 
     const [login] = useLoginMutation();
     const [error, setError] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleSubmit = async (e) => {
         e.preventDefault();        
@@ -21,6 +24,8 @@ export default function Login(){
             if(response.error && response.error.data.status == "error"){
                 setError(true)
             }else{
+                localStorage.setItem('sessionData', JSON.stringify(response.data))
+                dispatch(loginSuccess(response.data))
                 Swal.fire({
                     position: "top-end",
                     icon: "success",

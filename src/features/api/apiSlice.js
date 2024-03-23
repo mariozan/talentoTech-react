@@ -4,11 +4,14 @@ export const apiSlice = createApi({
     reducerPath: "api",
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:3000',
-        prepareHeaders: (headers, {}) => {
-            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWY0YmJhNzU1ZjczZDBiNWI2ZDY4MWIiLCJlbWFpbCI6Im1hcmlvQGNvcnJlbzEnLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcxMTA2ODAyMywiZXhwIjoxNzExMDcxNjIzfQ.QwXbfRDXd1CBGTeqXhYjtCBWwlFZBYQru0sMIhOvGQs"
-            if(token){
-                headers.set('Authorization', `Bearer ${token}`);
-            }
+        prepareHeaders: (headers, {getState}) => {
+            console.log(getState())
+            console.log(getState().auth.token)
+            // const localData = JSON.parse(localStorage.getItem('sessionData'))
+            // const token = localData.token
+            // if(token){
+            //     headers.set('Authorization', `Bearer ${token}`);
+            // }
             return headers;
         }
     }), // Hace las veces de Axios
