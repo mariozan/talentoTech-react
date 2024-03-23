@@ -5,13 +5,10 @@ export const apiSlice = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:3000',
         prepareHeaders: (headers, {getState}) => {
-            console.log(getState())
-            console.log(getState().auth.token)
-            // const localData = JSON.parse(localStorage.getItem('sessionData'))
-            // const token = localData.token
-            // if(token){
-            //     headers.set('Authorization', `Bearer ${token}`);
-            // }
+            const token = getState().auth.token
+            if(token){
+                headers.set('Authorization', `Bearer ${token}`);
+            }
             return headers;
         }
     }), // Hace las veces de Axios
