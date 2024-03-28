@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux'
 import { useEffect } from "react";
 import { loginSuccess } from "./features/authSlice";
 import PrivateRoute from "./components/PrivateRoute";
+import ChangePassword from "./components/auth/ChangePassword";
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
           <Route path="/" element={<PrivateRoute Component={Example} />} />
           <Route path="/user" element={<PrivateRoute Component={UserList} />} />
           <Route path="/user/:id" element={<PrivateRoute Component={UserFormEdit} />} />
+          <Route path="/change-password" element={<PrivateRoute Component={ChangePassword} />} />
           {/* Rutas Publicas */}
           <Route path="/create-user" element={<UserFormCreate />} />
           <Route path="/login" element={<Login />} />
