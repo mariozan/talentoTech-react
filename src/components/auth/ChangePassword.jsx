@@ -35,9 +35,8 @@ export default function ChangePassword(){
             if(!notEqualPassword){
                 const newUser = {
                     _id: user._id,
-                    password: e.target.password.value
+                    password: e.target["new-password"].value
                 }
-                console.log(newUser)
                 const response = await updateUser(newUser)
                 if(response.data.status == "error"){
                     Swal.fire({
