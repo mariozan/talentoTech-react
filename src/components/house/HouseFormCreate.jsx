@@ -15,7 +15,8 @@ export default function HouseFormCreate(){
         e.preventDefault();        
         const newHouse = {
             address: e.target.address.value,
-            city: e.target.city.value
+            department: e.target.department.value.split("-")[1],
+            city: e.target.city.value,
         }
         try {
             const response = await createHouse(newHouse)          

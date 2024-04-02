@@ -15,7 +15,7 @@ export default function HouseForm({props}){
         setCities([]) // Limpio la lista de ciudades 
         setSelectedDepartment(e.target.value)
         if(e.target.value){
-            const response = await getCities(e.target.value)
+            const response = await getCities(e.target.value.split("-")[0])
             setCities(response.data) // Lleno la lista de ciudades       
         }
     }
@@ -45,7 +45,7 @@ export default function HouseForm({props}){
                             className="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
                         <option value="">Seleccionar un Departmento</option>
                         {departments.map(department => (
-                            <option key={department.id} value={department.id}                            
+                            <option key={department.id} value={`${department.id}-${department.name}`}                          
                             >{department.name}</option>
                         ))}
                     </select>
