@@ -13,6 +13,7 @@ import { loginSuccess } from "./features/authSlice";
 import PrivateRoute from "./components/PrivateRoute";
 import ChangePassword from "./components/auth/ChangePassword";
 import HouseFormCreate from "./components/house/HouseFormCreate";
+import Chat from "./components/chat/Chat";
 
 function App() {
 
@@ -38,6 +39,9 @@ function App() {
 
           {/* Rutas de casas */}
           <Route path="/create-house" element={<PrivateRoute Component={HouseFormCreate} />} />
+
+          {/* Rutas del Chat */}
+          <Route path="/chat" element={<PrivateRoute Component={Chat} />} />
 
           {/* Rutas Publicas */}
           <Route path="/create-user" element={<UserFormCreate />} />

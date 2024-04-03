@@ -48,11 +48,14 @@ export default function Header() {
             Crear Usuario
           </Link>
         </li>
+        <Link to="/chat" className="hover:text-blue-500">
+            Chat
+        </Link>
       </ul>
       {/* DropDown Usuario Logueado */}
       <div className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 px-5">
         {isAutheticated ? (
-          <>
+          <>          
             <div className="relative">
               <img
                 src={`http://localhost:3000/${user.avatar}`}

@@ -17,6 +17,7 @@ export default function HouseFormCreate(){
             address: e.target.address.value,
             department: e.target.department.value.split("-")[1],
             city: e.target.city.value,
+            //TODO: Implement other properties
         }
         try {
             const response = await createHouse(newHouse)          
