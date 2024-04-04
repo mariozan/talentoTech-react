@@ -1,27 +1,57 @@
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import io from 'socket.io-client'
 import { useGetMessagesQuery } from '../../features/api/apiMessageSlice'
 import { useSelector } from "react-redux";
 
 export default  function Chat(){
 
-    const {data: messages, isLoading, isError, error } = useGetMessagesQuery()
+    const {data, isLoading, isError, error } = useGetMessagesQuery()
     const user = useSelector((state) => state.auth.user);
+    const [messages, setMessage] = useState([])
+    const endReference = useRef(null)
+
+    const scrollToBottom = () => {
+        console.log(endReference.current)
+        endReference.current?.scrollIntoView({ behavior: 'smooth'})            
+    }
+
+    const socket = io('http://localhost:3000', {
+        transports: ['websocket']
+    })
+
+    socket.on('connect', function(){
+        console.log("connected")
+    })
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(e.target.message.value)
+        const payload = {
+            "body": e.target.message.value,
+            "from": user._id,
+            "to": user._id // !NOTE: Id del destinatario, se deberia obtener previamente, para el ejemplo dejamos el mismo del FROM
+        }
+        const data = JSON.stringify(payload)
+        socket.emit("message", data)
+        e.target.message.value = ""
     }
 
-    useEffect(() => {
-        const socket = io('http://localhost:3000', {
-            transports: ['websocket']
-        })
-
-        socket.on('connect', function(){
-            console.log("connected")
-        })
+    socket.on("message-receipt", function(data){
+        const newMessage = {
+            "_id": data._id,
+            "body": data.body,
+            "from": {_id: data.from},
+            "to": {_id: data.to},
+            "createdAt": data.createdAt
+        }
+        setMessage([...messages, newMessage])
     })
+
+    useEffect(() => {       
+        if(data){
+            setMessage(data)
+        }
+        scrollToBottom()
+    }, [data])
 
     if (isLoading) return <div role="status" className='flex justify-center'>
         <svg aria-hidden="true" className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -38,7 +68,7 @@ export default  function Chat(){
                 <h1 className="text-lg font-semibold">Chat</h1>                
             </div>
             {/* Seccion de Mensajes */}
-            <div className="flex flex-col space-y-2">
+            <div className="flex flex-col space-y-2 bg-slate-50">
                 {messages.map(message => (
                     <div key={message._id} 
                         className={
@@ -49,12 +79,9 @@ export default  function Chat(){
                         <p>{message.body}</p>
                         <span className="text-xs text-gray-100 self-end">{message.createdAt}</span>
                     </div>
-                ))}
-                
-                <div className="bg-pink-300 text-gray-700 py-2 px-4 rounded-lg max-w-xs self-end">
-                    <p>Bien y tu</p>
-                </div>
+                ))}            
             </div>
+            <div ref={endReference}/>
             <hr />
             <form onSubmit={handleSubmit} className="flex bg-gray-300 text-blue-400 p-4">
                 <input type="text" 
